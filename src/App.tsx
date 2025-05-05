@@ -1,21 +1,35 @@
-import React from 'react';
+import { Outlet } from 'react-router-dom';
 import './App.scss';
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
+import { useEffect } from 'react';
+import { Loader } from './components/Loader';
+import { Menu } from './components/Menu';
+import { MenuProvider } from './context/MenuContext';
+import { fetchProducts } from './store/products';
+import { useAppDispatch, useAppSelector } from './hooks';
 
-interface Props {
-  onClick: () => void;
-  children: React.ReactNode;
-}
+export const App = () => {
+  const dispatch = useAppDispatch();
+  const { error, loading } = useAppSelector(state => state.products);
 
-export const Provider: React.FC<Props> = React.memo(({ onClick, children }) => (
-  <button type="button" onClick={onClick}>
-    {children}
-  </button>
-));
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
 
-export const App: React.FC = () => {
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
-    <div className="starter">
-      <Provider onClick={() => ({})}>TodoList</Provider>
-    </div>
+    <>
+      <h1 className="page-title">Product Catalog</h1>
+      <MenuProvider>
+        <Header />
+        <Menu />
+      </MenuProvider>
+      <main className="main">{error ? <h2>{error}</h2> : <Outlet />}</main>
+      <Footer />
+    </>
   );
 };
