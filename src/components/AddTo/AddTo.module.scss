@@ -27,13 +27,12 @@
   &__message {
     box-sizing: border-box;
     position: absolute;
-    background-color: $gray-primary;
+    background-color: var(--card-bg);
+    color: var(--text-main);
     border: 1px solid $gray-border;
     width: 200px;
-    left: 50%;
-    bottom: 115%;
+    bottom: 150%;
     border-radius: 5%;
-    color: #fff;
     padding: 5px;
     pointer-events: none;
     z-index: 999;
